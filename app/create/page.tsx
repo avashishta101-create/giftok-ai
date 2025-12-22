@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 
 async function handleSignOut() {
   await signOut({ redirect: false });
-  window.location.href = "/login";
+  window.location.replace("/login");
 }
 
 export default function CreatePage() {
@@ -59,18 +59,18 @@ export default function CreatePage() {
           }}
         />
         <button
-          onClick={searchGifs}
-          disabled={!caption || loading}
-          style={{
-            marginTop: 12,
-            padding: "10px 16px",
-            background: "black",
-            color: "white",
-            borderRadius: 6,
-          }}
-        >
-          {loading ? "Searching..." : "Find GIFs"}
-        </button>
+  onClick={handleSignOut}
+  style={{
+    background: "transparent",
+    border: "1px solid #ccc",
+    padding: "6px 12px",
+    borderRadius: 6,
+    cursor: "pointer",
+  }}
+>
+  Sign out
+</button>
+
       </div>
 
       <div

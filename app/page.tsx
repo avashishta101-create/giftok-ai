@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 
 async function handleSignOut() {
   await signOut({ redirect: false });
-  window.location.href = "/login";
+  window.location.replace("/login");
 }
 
 export default function Dashboard() {
