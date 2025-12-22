@@ -5,19 +5,18 @@ export const authConfig = {
     signIn: '/login',
   },
   providers: [
-    // added later in auth.ts since it requires bcrypt which is only compatible with Node.js
-    // while this file is also used in non-Node.js environments
+    // providers added later in auth.ts
   ],
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      let isLoggedIn = !!auth?.user;
-      let isOnDashboard = nextUrl.pathname.startsWith('/create');
+      const isLoggedIn = !!auth?.user;
 
-      if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn) {
-        return Response.redirect(new URL('/login', nextUrl));
+      const isProtectedRoute =
+        nextUrl.pathname === '/' ||
+        nextUrl.pathname.startsWith('/create');
+
+      if (isProtectedRoute && !isLoggedIn) {
+        return false;
       }
 
       return true;
