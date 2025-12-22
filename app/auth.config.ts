@@ -7,19 +7,31 @@ export const authConfig = {
   providers: [
     // providers added later in auth.ts
   ],
+ 
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
+  authorized(
+    {
+      auth,
+      request,
+    }: {
+      auth: any;
+      request: { nextUrl: URL };
+    }
+  ) {
+    const { nextUrl } = request;
 
-      const isProtectedRoute =
-        nextUrl.pathname === '/' ||
-        nextUrl.pathname.startsWith('/create');
+    const isLoggedIn = !!auth?.user;
 
-      if (isProtectedRoute && !isLoggedIn) {
-        return false;
-      }
+    const isProtectedRoute =
+      nextUrl.pathname === '/' ||
+      nextUrl.pathname.startsWith('/create');
 
-      return true;
-    },
+    if (isProtectedRoute && !isLoggedIn) {
+      return false;
+    }
+
+    return true;
   },
+},
+
 } satisfies NextAuthConfig;
