@@ -1,20 +1,6 @@
-import { NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import { authConfig } from "app/auth.config";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q");
+const handler = NextAuth(authConfig);
 
-  if (!q) {
-    return NextResponse.json({ results: [] });
-  }
-
-  const apiKey = process.env.TENOR_API_KEY;
-  const url = `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(
-    q
-  )}&key=${apiKey}&limit=12&media_filter=gif`;
-
-  const res = await fetch(url);
-  const data = await res.json();
-
-  return NextResponse.json(data);
-}
+export { handler as GET, handler as POST };
