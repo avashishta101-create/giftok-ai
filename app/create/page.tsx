@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 export default function CreatePage() {
   const [caption, setCaption] = useState("");
@@ -17,7 +19,23 @@ export default function CreatePage() {
 
   return (
     <div style={{ padding: 40, maxWidth: 800, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 28, fontWeight: "bold" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Link href="/">← Back</Link>
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          style={{
+            background: "transparent",
+            border: "1px solid #ccc",
+            padding: "6px 12px",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          Sign out
+        </button>
+      </div>
+
+      <h1 style={{ fontSize: 28, fontWeight: "bold", marginTop: 20 }}>
         Create a Giftok
       </h1>
 
