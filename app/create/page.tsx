@@ -4,6 +4,33 @@ import { useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
+const [selectedGif, setSelectedGif] = useState<string | null>(null);
+const [video, setVideo] = useState<string | null>(null);
+const [generating, setGenerating] = useState(false);
+
+ async function generateVideo() {
+    if (!selectedGif) return;
+    setGenerating(true);
+
+    const res = await fetch("/api/video", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        gifUrl: selectedGif,
+        caption,
+      }),
+    });
+
+    const data = await res.json();
+    setVideo(data.video);
+    setGenerating(false);
+  }
+
+  return (
+    ...
+  );
+}
+
 async function handleSignOut() {
   console.log("Signing out...");
   await signOut({ redirect: false }); // clears the cookie/session
@@ -82,14 +109,60 @@ export default function CreatePage() {
           marginTop: 30,
         }}
       >
-        {gifs.map((gif) => (
-          <img
-            key={gif.id}
-            src={gif.media_formats.gif.url}
-            alt={gif.content_description}
-            style={{ width: "100%", borderRadius: 8 }}
-          />
-        ))}
+
+        {selectedGif && (
+  <button
+    onClick={generateVideo}
+    disabled={generating}
+    style={{
+      marginTop: 20,
+      padding: "12px 18px",
+      background: "black",
+      color: "white",
+      borderRadius: 6,
+    }}
+  >
+    {generating ? "Generating..." : "Generate Video"}
+  </button>
+)}
+
+ <div className="grid">
+  {gifs.map(...)}
+</div>
+
+{selectedGif && ( /* Generate button */ )}
+
+{video && (
+  <div style={{ marginTop: 30 }}>
+    <h3>Preview</h3>
+    <video
+      src={video}
+      controls
+      style={{ width: "100%", marginTop: 10, borderRadius: 8 }}
+    />
+    <a href={video} download="giftok.mp4">
+      Download MP4
+    </a>
+  </div>
+)}
+       
+        {gifs.map((gif) => {
+  const url = gif.media_formats.gif.url;
+  return (
+    <img
+      key={gif.id}
+      src={url}
+      alt=""
+      onClick={() => setSelectedGif(url)}
+      style={{
+        width: "100%",
+        borderRadius: 8,
+        cursor: "pointer",
+        border: selectedGif === url ? "3px solid black" : "2px solid transparent",
+      }}
+    />
+  );
+})}
       </div>
     </div>
   );
