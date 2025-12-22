@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function ProtectedHome() {
+export default function Dashboard() {
   return (
     <div style={{ padding: 40 }}>
       <h1 style={{ fontSize: 28, fontWeight: "bold" }}>
@@ -8,7 +8,7 @@ export default function ProtectedHome() {
       </h1>
 
       <p style={{ marginTop: 12 }}>
-        You are signed in. Start creating viral Giftoks below.
+        You are signed in.
       </p>
 
       <div style={{ marginTop: 24 }}>

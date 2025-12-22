@@ -17,7 +17,9 @@ export default function CreatePage() {
 
   return (
     <div style={{ padding: 40, maxWidth: 800, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 28, fontWeight: "bold" }}>Create a Giftok</h1>
+      <h1 style={{ fontSize: 28, fontWeight: "bold" }}>
+        Create a Giftok
+      </h1>
 
       <div style={{ marginTop: 20 }}>
         <input
