@@ -5,8 +5,9 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 async function handleSignOut() {
-  await signOut({ redirect: false });
-  window.location.replace("/login");
+  console.log("Signing out...");
+  await signOut({ redirect: false }); // clears the cookie/session
+  window.location.replace("/login"); // force fresh request
 }
 
 export default function CreatePage() {
