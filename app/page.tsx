@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
+async function handleSignOut() {
+  await signOut({ redirect: false });
+  window.location.href = "/login";
+}
+
 export default function Dashboard() {
   return (
     <div style={{ padding: 40 }}>
@@ -11,17 +16,17 @@ export default function Dashboard() {
           Giftok AI Dashboard
         </h1>
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
-          style={{
-            background: "transparent",
-            border: "1px solid #ccc",
-            padding: "6px 12px",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          Sign out
-        </button>
+  onClick={handleSignOut}
+  style={{
+    background: "transparent",
+    border: "1px solid #ccc",
+    padding: "6px 12px",
+    borderRadius: 6,
+    cursor: "pointer",
+  }}
+>
+  Sign out
+</button>
       </div>
 
       <p style={{ marginTop: 12 }}>

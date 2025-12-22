@@ -4,6 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
+async function handleSignOut() {
+  await signOut({ redirect: false });
+  window.location.href = "/login";
+}
+
 export default function CreatePage() {
   const [caption, setCaption] = useState("");
   const [gifs, setGifs] = useState<any[]>([]);
@@ -22,17 +27,17 @@ export default function CreatePage() {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Link href="/">← Back</Link>
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
-          style={{
-            background: "transparent",
-            border: "1px solid #ccc",
-            padding: "6px 12px",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          Sign out
-        </button>
+  onClick={handleSignOut}
+  style={{
+    background: "transparent",
+    border: "1px solid #ccc",
+    padding: "6px 12px",
+    borderRadius: 6,
+    cursor: "pointer",
+  }}
+>
+  Sign out
+</button>
       </div>
 
       <h1 style={{ fontSize: 28, fontWeight: "bold", marginTop: 20 }}>
