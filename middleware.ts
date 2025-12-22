@@ -1,23 +1,20 @@
 import NextAuth from "next-auth";
 import { authConfig } from "app/auth.config";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
-export async function middleware(req: NextRequest) {
+export default auth((req) => {
   const { nextUrl } = req;
-  const session = await auth(req);
-
-  const isLoggedIn = !!session;
-
-  const isPublicRoute =
-    nextUrl.pathname.startsWith("/login") ||
-    nextUrl.pathname.startsWith("/register") ||
-    nextUrl.pathname.startsWith("/api");
+  const isLoggedIn = !!req.auth;
 
   const isProtectedRoute =
-    nextUrl.pathname === "/" || nextUrl.pathname.startsWith("/create");
+    nextUrl.pathname === "/" ||
+    nextUrl.pathname.startsWith("/create");
+
+  const isAuthRoute =
+    nextUrl.pathname.startsWith("/login") ||
+    nextUrl.pathname.startsWith("/register");
 
   // Not logged in and trying to access protected → go to login
   if (!isLoggedIn && isProtectedRoute) {
@@ -25,12 +22,12 @@ export async function middleware(req: NextRequest) {
   }
 
   // Logged in and trying to access login/register → go to dashboard
-  if (isLoggedIn && (nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/register"))) {
+  if (isLoggedIn && isAuthRoute) {
     return NextResponse.redirect(new URL("/", nextUrl));
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ["/:path*"],
