@@ -8,15 +8,6 @@ export default function AdminPage() {
   const [gifs, setGifs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  async function search() {
-    if (!query) return;
-    setLoading(true);
-    const res = await fetch(`/api/gifs?q=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    setGifs(data.results || []);
-    setLoading(false);
-  }
-
   async function saveGif(url: string) {
     await fetch("/api/admin/gifs", {
       method: "POST",
@@ -24,6 +15,15 @@ export default function AdminPage() {
       body: JSON.stringify({ url, theme }),
     });
     alert("Saved!");
+  }
+
+  async function search() {
+    if (!query) return;
+    setLoading(true);
+    const res = await fetch(`/api/gifs?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    setGifs(data.results || []);
+    setLoading(false);
   }
 
   return (
@@ -36,7 +36,7 @@ export default function AdminPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") search();
+            if (e.key === "Enter" && query) search();
           }}
           style={{ padding: 10, width: 300 }}
         />
@@ -55,7 +55,10 @@ export default function AdminPage() {
           <option value="neutral">neutral</option>
         </select>
 
-        <button onClick={search} style={{ marginLeft: 10, padding: "10px 16px" }}>
+        <button
+          onClick={search}
+          style={{ marginLeft: 10, padding: "10px 16px" }}
+        >
           {loading ? "Searching..." : "Search"}
         </button>
       </div>
@@ -72,7 +75,11 @@ export default function AdminPage() {
           const url = gif.media_formats.gif.url;
           return (
             <div key={gif.id}>
-              <img src={url} style={{ width: "100%", borderRadius: 6 }} />
+              <img
+                src={url}
+                alt=""
+                style={{ width: "100%", borderRadius: 6 }}
+              />
               <button
                 onClick={() => saveGif(url)}
                 style={{ width: "100%", marginTop: 6 }}
