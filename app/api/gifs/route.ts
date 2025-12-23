@@ -1,4 +1,17 @@
 import { NextResponse } from "next/server";
+import { saveCuratedGif } from "@/app/db";
+
+export async function POST(req: Request) {
+  const { url, theme } = await req.json();
+
+  if (!url || !theme) {
+    return NextResponse.json({ error: "Missing data" }, { status: 400 });
+  }
+
+  await saveCuratedGif(url, theme);
+
+  return NextResponse.json({ success: true });
+}
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
