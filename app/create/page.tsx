@@ -51,12 +51,25 @@ export default function CreatePage() {
       <h1 style={{ marginTop: 20 }}>Create a Giftok</h1>
 
       <input
-        type="text"
-        placeholder="Enter caption..."
-        value={caption}
-        onChange={(e) => setCaption(e.target.value)}
-        style={{ width: "100%", padding: 12, marginTop: 20 }}
-      />
+  type="text"
+  placeholder="Enter caption..."
+  value={caption}
+  onChange={(e) => setCaption(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && caption) {
+      searchGifs();
+    }
+  }}
+  style={{
+    width: "100%",
+    padding: 12,
+    fontSize: 16,
+    border: "1px solid #ccc",
+    borderRadius: 6,
+    marginTop: 20,
+  }}
+/>
+
 
       <button
         onClick={searchGifs}
