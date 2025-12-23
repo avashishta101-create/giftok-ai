@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminPage() {
   const [query, setQuery] = useState("");
   const [theme, setTheme] = useState("panic");
   const [gifs, setGifs] = useState<any[]>([]);
+  const [saved, setSaved] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   async function saveGif(url: string) {
@@ -14,7 +15,23 @@ export default function AdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url, theme }),
     });
+    await loadSaved();
     alert("Saved!");
+  }
+
+  async function deleteGif(id: number) {
+    await fetch("/api/admin/curated", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    await loadSaved();
+  }
+
+  async function loadSaved() {
+    const res = await fetch("/api/admin/curated");
+    const data = await res.json();
+    setSaved(data.gifs || []);
   }
 
   async function search() {
@@ -25,6 +42,10 @@ export default function AdminPage() {
     setGifs(data.results || []);
     setLoading(false);
   }
+
+  useEffect(() => {
+    loadSaved();
+  }, []);
 
   return (
     <div style={{ padding: 40 }}>
@@ -63,6 +84,7 @@ export default function AdminPage() {
         </button>
       </div>
 
+      {/* Tenor search results */}
       <div
         style={{
           display: "grid",
@@ -89,6 +111,42 @@ export default function AdminPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* Saved curated GIFs */}
+      <h2 style={{ marginTop: 50 }}>Saved GIFs</h2>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 12,
+          marginTop: 20,
+        }}
+      >
+        {saved.map((gif) => (
+          <div key={gif.id}>
+            <img
+              src={gif.url}
+              alt=""
+              style={{ width: "100%", borderRadius: 6 }}
+            />
+            <div style={{ fontSize: 12, marginTop: 4 }}>
+              Theme: {gif.theme}
+            </div>
+            <button
+              onClick={() => deleteGif(gif.id)}
+              style={{
+                width: "100%",
+                marginTop: 6,
+                background: "crimson",
+                color: "white",
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
